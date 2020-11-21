@@ -8,6 +8,10 @@
     <artifactId>ArsenicTau</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <java.version>15</java.version>
+    </properties>
+
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
