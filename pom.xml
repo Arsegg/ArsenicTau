@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <antlr4.visitor>true</antlr4.visitor>
         <java.version>15</java.version>
     </properties>
 
