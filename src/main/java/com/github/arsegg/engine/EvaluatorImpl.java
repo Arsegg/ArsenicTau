@@ -5,14 +5,19 @@ import com.github.arsegg.ExpressionLexer;
 import com.github.arsegg.ExpressionParser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.function.BinaryOperator;
 
 @Component
 public final class EvaluatorImpl implements Evaluator {
+    private static final Logger log = LoggerFactory.getLogger(EvaluatorImpl.class);
+
     @Override
     public Number evaluate(String expression) {
+        log.info("Processing: " + expression);
         final var input = CharStreams.fromString(expression);
         final var expressionLexer = new ExpressionLexer(input);
         final var commonTokenStream = new CommonTokenStream(expressionLexer);
@@ -20,7 +25,9 @@ public final class EvaluatorImpl implements Evaluator {
         final var evaluateVisitor = new EvaluateVisitor();
         final var program = expressionParser.program();
         final var tree = program.expression();
-        return evaluateVisitor.visit(tree);
+        final var result = evaluateVisitor.visit(tree);
+        log.info("Processed: " + result);
+        return result;
     }
 
     private static final class EvaluateVisitor extends ExpressionBaseVisitor<Integer> {
