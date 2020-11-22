@@ -36,7 +36,7 @@ public final class EvaluatorImpl implements Evaluator {
 
         private static BinaryOperator<Integer> get(String operator) {
             return switch (operator) {
-                case "+" -> (left, right) -> left + left;
+                case "+" -> Integer::sum;
                 case "-" -> (left, right) -> left - right;
                 default -> throw new UnsupportedOperationException(operator + " is not supported");
             };
