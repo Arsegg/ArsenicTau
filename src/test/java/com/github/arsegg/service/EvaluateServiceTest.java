@@ -18,4 +18,60 @@ class EvaluateServiceTest {
         final var expected = 4;
         assertThat(actual, is(expected));
     }
+
+    @Test
+    void when2Minus2Then0() {
+        final var actual = evaluateService.evaluate("2 - 2");
+        final var expected = 0;
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    void when2Times2Then4() {
+        final var actual = evaluateService.evaluate("2 * 2");
+        final var expected = 4;
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    void when2Divide2Then1() {
+        final var actual = evaluateService.evaluate("2 / 2");
+        final var expected = 1;
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    void when2Power2Then4() {
+        final var actual = evaluateService.evaluate("2 ^ 2");
+        final var expected = 4;
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    void whenSqrt2Then1() {
+        final var actual = evaluateService.evaluate("sqrt 2");
+        final var expected = 1;
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    void when2Plus2Times2Then8() {
+        final var actual = evaluateService.evaluate("(2 + 2) * 2");
+        final var expected = 8;
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    void whenMinus2ThenMinus2() {
+        final var actual = evaluateService.evaluate("-2");
+        final var expected = -2;
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    void whenPlus2Then2() {
+        final var actual = evaluateService.evaluate("+2");
+        final var expected = 2;
+        assertThat(actual, is(expected));
+    }
 }
