@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.function.BinaryOperator;
+import java.util.function.UnaryOperator;
 
 @Component
 public final class EvaluatorImpl implements Evaluator {
@@ -31,22 +32,42 @@ public final class EvaluatorImpl implements Evaluator {
     }
 
     private static final class EvaluateVisitor extends ExpressionBaseVisitor<Integer> {
-        @Override
-        public Integer visitToInt(ExpressionParser.ToIntContext ctx) {
-            return Integer.parseInt(ctx.number.getText());
+        private static UnaryOperator<Integer> getUnaryOperator(String operator) {
+            if ("sqrt".equals(operator)) {
+                return (right) -> (int) Math.sqrt(right);
+            }
+            throw new UnsupportedOperationException(operator + " is not supported");
         }
 
-        @Override
-        public Integer visitAdditionAndSubtraction(ExpressionParser.AdditionAndSubtractionContext ctx) {
-            return get(ctx.operator.getText()).apply(visit(ctx.left), visit(ctx.right));
-        }
-
-        private static BinaryOperator<Integer> get(String operator) {
+        private static BinaryOperator<Integer> getBinaryOperator(String operator) {
             return switch (operator) {
                 case "+" -> Integer::sum;
                 case "-" -> (left, right) -> left - right;
+                case "*" -> (left, right) -> left * right;
+                case "/" -> (left, right) -> left / right;
+                case "^" -> (left, right) -> (int) Math.pow(left, right);
                 default -> throw new UnsupportedOperationException(operator + " is not supported");
             };
+        }
+
+        @Override
+        public Integer visitToInt(ExpressionParser.ToIntContext ctx) {
+            return Integer.parseInt(ctx.getText());
+        }
+
+        @Override
+        public Integer visitUnaryOperator(ExpressionParser.UnaryOperatorContext ctx) {
+            return getUnaryOperator(ctx.operator.getText()).apply(visit(ctx.right));
+        }
+
+        @Override
+        public Integer visitBinaryOperator(ExpressionParser.BinaryOperatorContext ctx) {
+            return getBinaryOperator(ctx.operator.getText()).apply(visit(ctx.left), visit(ctx.right));
+        }
+
+        @Override
+        public Integer visitParenthesis(ExpressionParser.ParenthesisContext ctx) {
+            return visit(ctx.expression());
         }
     }
 }
