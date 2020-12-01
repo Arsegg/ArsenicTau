@@ -74,4 +74,11 @@ class EvaluateServiceTest {
         final var expected = 2;
         assertThat(actual, is(expected));
     }
+
+    @Test
+    void when2Power2Power3Then256() {
+        final var actual = evaluateService.evaluate("2 ^ 2 ^ 3");
+        final var expected = 256;
+        assertThat(actual, is(expected));
+    }
 }
